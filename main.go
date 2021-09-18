@@ -1,3 +1,5 @@
+// Command django-translation-cleaner is a tool for cleaning unused
+// translations from .po files in a Django project.
 package main
 
 import (
@@ -13,9 +15,35 @@ import (
 )
 
 var check = flag.Bool("check", false, "")
+var usage = `Usage: django-translation-cleaner [options...] <path to repo>
+
+django-translation-cleaner is a tool for cleaning unused translations from .po
+files in a Django project.
+
+Example:
+
+- Clean unused translations from a Django project:
+    $ django-translation-cleaner /path/to/repo
+
+- Check for unused translations in a Django project. If there are any unused
+translations, prints them to stdout and returns non-zero exit code:
+    $ django-translation-cleaner --check /path/to/repo
+
+Options:
+ --check (-c) Checks for unused translations without removing them. Returns
+non-zero exit code if there are any unused translations.
+ --help (-h) Prints this message.
+`
 
 func main() {
+	flag.Usage = func() {
+		fmt.Fprintf(os.Stderr, "%s\n", usage)
+	}
 	flag.Parse()
+	if flag.NArg() < 1 {
+		flag.Usage()
+		os.Exit(2)
+	}
 	root := flag.Arg(0)
 	absRoot, err := filepath.Abs(root)
 
@@ -27,13 +55,14 @@ func main() {
 	}
 
 	// Parse repo's gitignore
+	// TODO: make this conditional on whether path has a gitignore in its lineage?
 	gitignorePath := filepath.Join(absRoot, ".gitignore")
 
 	// Include venv in case it's not ignored
 	ignore, err := ignore.CompileIgnoreFileAndLines(gitignorePath, ".venv")
 	if err != nil {
 		fmt.Fprint(os.Stderr, err)
-		os.Exit(2)
+		os.Exit(3)
 	}
 
 	// Clean ignored files from list of .po files
@@ -53,7 +82,7 @@ func main() {
 		f, err := os.Open(path)
 		if err != nil {
 			fmt.Fprint(os.Stderr, err)
-			os.Exit(3)
+			os.Exit(4)
 		}
 		defer f.Close()
 
@@ -66,7 +95,7 @@ func main() {
 				used, err := isUsedInPaths(translation, pythonFiles, htmlFiles)
 				if err != nil {
 					fmt.Fprint(os.Stderr, err)
-					os.Exit(4)
+					os.Exit(5)
 				}
 				if !used {
 					unusedCount++
