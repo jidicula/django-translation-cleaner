@@ -65,7 +65,7 @@ func main() {
 	// Get all .po translationFiles in repo
 	translationFiles, err := walkMatch(absRoot, "*.po")
 	if err != nil {
-		fmt.Fprint(os.Stderr, err)
+		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
 
@@ -76,7 +76,7 @@ func main() {
 	// Include venv in case it's not ignored
 	ignore, err := ignore.CompileIgnoreFileAndLines(gitignorePath, ".venv")
 	if err != nil {
-		fmt.Fprint(os.Stderr, err)
+		fmt.Fprintln(os.Stderr, err)
 		os.Exit(3)
 	}
 
@@ -96,7 +96,7 @@ func main() {
 	for _, path := range translationFiles {
 		f, err := os.Open(path)
 		if err != nil {
-			fmt.Fprint(os.Stderr, err)
+			fmt.Fprintln(os.Stderr, err)
 			os.Exit(4)
 		}
 		defer f.Close()
@@ -109,7 +109,7 @@ func main() {
 				translation = strings.Trim(translation, `"`)
 				used, err := isUsedInPaths(translation, pythonFiles, htmlFiles)
 				if err != nil {
-					fmt.Fprint(os.Stderr, err)
+					fmt.Fprintln(os.Stderr, err)
 					os.Exit(5)
 				}
 				if !used {
