@@ -124,7 +124,6 @@ func main() {
 	}
 
 	// TODO: write out new file by default
-	// TODO: check file if --check flag
 
 	if *check {
 		if unusedCount > 0 {
