@@ -153,10 +153,12 @@ func main() {
 				}
 			}
 		}
-		err = w.Flush()
-		if err != nil {
-			fmt.Fprintln(os.Stderr, err)
-			os.Exit(8)
+		if !*check {
+			err = w.Flush()
+			if err != nil {
+				fmt.Fprintln(os.Stderr, err)
+				os.Exit(8)
+			}
 		}
 	}
 
