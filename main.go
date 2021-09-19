@@ -61,6 +61,10 @@ func main() {
 	}
 	root := flag.Arg(0)
 	absRoot, err := filepath.Abs(root)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(9)
+	}
 
 	// Get all .po translationFiles in repo
 	translationFiles, err := walkMatch(absRoot, "*.po")
@@ -84,8 +88,18 @@ func main() {
 	// fmt.Println(translationFiles)
 
 	pythonFiles, err := walkMatch(absRoot, "*.py")
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(10)
+	}
+
 	pythonFiles = cleanIgnoredPaths(pythonFiles, ignore)
 	htmlFiles, err := walkMatch(absRoot, "*.html")
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(11)
+	}
+
 	htmlFiles = cleanIgnoredPaths(htmlFiles, ignore)
 
 	var unusedCount int
