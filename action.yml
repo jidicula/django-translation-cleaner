@@ -1,0 +1,19 @@
+name: "django-translation-cleaner Check"
+description: "Use django-translation-cleaner to see if your Django project has any unused translations that should be removed."
+inputs:
+  check-path:
+    description: 'Path to check translation files in.'
+    default: ''
+
+branding:
+  icon: "book-open"
+  color: "green"
+
+runs:
+  using: "composite"
+  steps:
+    - run: go install github.com/jidicula/django-translation-cleaner@latest
+      shell: bash
+
+    - run: django-translation-cleaner --check ${{ github.workspace }}/${{ inputs.check-path }}
+      shell: bash
