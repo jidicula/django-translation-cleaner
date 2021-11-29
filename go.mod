@@ -17,3 +17,5 @@ module github.com/jidicula/django-translation-cleaner
 go 1.17
 
 require github.com/sabhiram/go-gitignore v0.0.0-20201211210132-54b8a0bf510f
+
+require github.com/spf13/pflag v1.0.5

@@ -19,17 +19,18 @@ package main
 
 import (
 	"bufio"
-	"flag"
 	"fmt"
 	"os"
 	"path/filepath"
 	"regexp"
 	"strings"
 
+	flag "github.com/spf13/pflag"
+
 	ignore "github.com/sabhiram/go-gitignore"
 )
 
-var check = flag.Bool("check", false, "")
+var check = flag.BoolP("check", "c", false, "")
 var usage = `Usage: django-translation-cleaner [options...] <path to repo>
 
 django-translation-cleaner is a tool for cleaning unused translations from .po
