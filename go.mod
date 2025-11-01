@@ -14,7 +14,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 module github.com/jidicula/django-translation-cleaner
 
-go 1.17
+go 1.25
 
 require github.com/sabhiram/go-gitignore v0.0.0-20201211210132-54b8a0bf510f
 
