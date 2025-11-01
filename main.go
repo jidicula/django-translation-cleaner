@@ -120,7 +120,8 @@ func main() {
 
 		if !*check {
 			tempFileName := path + "_tmp"
-			tempF, err := os.Create(tempFileName)
+			var tempF *os.File
+			tempF, err = os.Create(tempFileName)
 			if err != nil {
 				fmt.Fprintln(os.Stderr, err)
 				os.Exit(6)
@@ -138,7 +139,8 @@ func main() {
 				translation := strings.Split(scanner.Text(), "msgid ")[1]
 
 				translation = strings.Trim(translation, `"`)
-				used, err := isUsedInPaths(translation, pythonFiles, htmlFiles)
+				var used bool
+				used, err = isUsedInPaths(translation, pythonFiles, htmlFiles)
 				if err != nil {
 					fmt.Fprintln(os.Stderr, err)
 					os.Exit(5)
@@ -158,7 +160,7 @@ func main() {
 			if !*check {
 
 				if write {
-					_, err := w.WriteString(scanner.Text() + "\n")
+					_, err = w.WriteString(scanner.Text() + "\n")
 					if err != nil {
 						fmt.Fprintln(os.Stderr, err)
 						os.Exit(7)
